@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Emerald gem: outer cut -->
+    <path
+        android:fillColor="#5CF7A0"
+        android:pathData="M40,28 L68,28 L82,44 L54,82 L26,44 Z" />
+    <!-- Table (top facet) -->
+    <path
+        android:fillColor="#B9FFD6"
+        android:pathData="M40,28 L68,28 L74,38 L34,38 Z" />
+    <!-- Center facets -->
+    <path
+        android:fillColor="#2FD67E"
+        android:pathData="M34,38 L54,82 L44,44 Z" />
+    <path
+        android:fillColor="#E8FFF1"
+        android:pathData="M74,38 L54,82 L64,44 Z" />
+    <!-- Outline -->
+    <path
+        android:strokeColor="#E8FFF1"
+        android:strokeWidth="1.5"
+        android:strokeLineJoin="round"
+        android:pathData="M40,28 L68,28 L82,44 L54,82 L26,44 Z" />
+</vector>

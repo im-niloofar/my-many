@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>کیف پول من</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E2A1F; --bill:#2F7D4A; --mint:#EEF5EC; --paper:#FFFFFF;
+  --gold:#C9A227; --red:#B3261E; --amber:#B26A00; --muted:#5C7065; --line:#D7E4D6;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E6F2E8; --bill:#6CC08B; --mint:#0C1F17; --paper:#14291F;
+    --gold:#E2BE4A; --red:#F2827A; --amber:#F0B45A; --muted:#9DB5A6; --line:#24402F;
+  }
+}
+[hidden]{display:none !important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mint);color:var(--ink);font-family:Vazirmatn,Tahoma,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit}
+.app{max-width:480px;margin:0 auto;min-height:100vh;padding:env(safe-area-inset-top,0px) 16px 120px}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 4px 6px}
+h1{font-size:20px;margin:0;font-weight:800}
+header small{color:var(--muted)}
+h2{font-size:15px;margin:0 0 10px;font-weight:800}
+small,.muted{color:var(--muted);font-size:13px}
+
+.hero{background:linear-gradient(135deg,#0E2A1F 0%,#2F7D4A 100%);color:#F4FBF5;border-radius:24px;padding:22px;position:relative;overflow:hidden;margin-top:10px}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 100% 0,rgba(255,255,255,.07) 0 2px,transparent 2px 14px)}
+.hero small{color:#CFE6D5}
+.hero .big{font-size:34px;font-weight:800;margin:6px 0 4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;position:relative}
+.stat{background:rgba(255,255,255,.12);border-radius:16px;padding:10px 12px}
+.stat div{font-weight:600;margin-top:2px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:16px;margin-top:12px}
+.alert{border-radius:14px;padding:10px 12px;font-size:14px;margin-top:10px;border-right:4px solid}
+.alert.bad{background:rgba(179,38,30,.12);border-color:var(--red);color:var(--red)}
+.alert.warn{background:rgba(178,106,0,.12);border-color:var(--amber);color:var(--amber)}
+.alert.good{background:rgba(47,125,74,.14);border-color:var(--bill);color:var(--bill)}
+
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--bill);transition:width .4s ease}
+
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .r-end{display:flex;align-items:center;gap:6px}
+.amt{font-weight:800;white-space:nowrap}
+.amt.in{color:var(--bill)}
+.amt.out{color:var(--red)}
+.amt.neu{color:var(--muted)}
+
+label{display:grid;gap:6px;font-size:14px;color:var(--muted);margin-top:10px}
+input,select{padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--mint);color:var(--ink);font-size:16px;width:100%;min-width:0}
+.inline{display:flex;gap:8px;align-items:center}
+.inline input{flex:1}
+
+.primary{background:var(--bill);color:#fff;border:0;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer}
+.ghost{background:none;border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:12px 16px;cursor:pointer}
+.del{background:none;border:0;color:var(--muted);cursor:pointer;font-size:16px;padding:4px 6px}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+.empty{color:var(--muted);text-align:center;padding:24px 8px;font-size:14px}
+
+nav.tabs{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(448px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px;box-shadow:0 8px 24px rgba(14,42,31,.14);margin-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .t{flex:1;border:0;background:none;padding:10px 4px;border-radius:999px;color:var(--muted);font-weight:600;cursor:pointer}
+nav.tabs .t[aria-selected="true"]{background:var(--bill);color:#fff}
+.fab{width:52px;height:52px;border-radius:50%;border:0;background:var(--gold);color:#0E2A1F;font-size:28px;font-weight:800;cursor:pointer;margin:0 6px;flex:none;line-height:1}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:5}
+.sheet{background:var(--paper);width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:20px 16px calc(24px + env(safe-area-inset-bottom,0px));display:grid;gap:4px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
+.seg button{padding:10px 2px;border-radius:12px;border:1px solid var(--line);background:none;color:var(--ink);font-size:13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--bill);color:#fff;border-color:var(--bill)}
+.sheet .btns{display:flex;gap:8px;margin-top:14px}
+.sheet .btns>*{flex:1}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--mint);padding:10px 16px;border-radius:12px;opacity:0;transition:opacity .25s;pointer-events:none;font-size:14px;z-index:9;max-width:90%}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>کیف پول من</h1>
+    <small id="today"></small>
+  </header>
+  <main id="view"></main>
+</div>
+
+<nav class="tabs" aria-label="ناوبری">
+  <button class="t" data-tab="home" aria-selected="true">خلاصه</button>
+  <button class="t" data-tab="plans" aria-selected="false">پلن‌ها</button>
+  <button class="fab" id="fab" aria-label="ثبت تراکنش">+</button>
+  <button class="t" data-tab="tx" aria-selected="false">تراکنش‌ها</button>
+</nav>
+
+<div class="sheet-bg" id="sheetBg" hidden>
+  <form class="sheet" id="sheetForm" autocomplete="off">
+    <h2>ثبت تراکنش</h2>
+    <div class="seg" id="segType">
+      <button type="button" data-type="out" aria-pressed="true">هزینه</button>
+      <button type="button" data-type="in" aria-pressed="false">درآمد</button>
+      <button type="button" data-type="save" aria-pressed="false">واریز پس‌انداز</button>
+      <button type="button" data-type="take" aria-pressed="false">برداشت</button>
+    </div>
+    <label>مبلغ (تومان)
+      <input id="fAmount" inputmode="numeric" placeholder="مثلاً ۲۵۰۰۰۰">
+    </label>
+    <label id="planWrap">پلن
+      <select id="fPlan"></select>
+    </label>
+    <label>توضیح
+      <input id="fNote" maxlength="60" placeholder="مثلاً خرید میوه">
+    </label>
+    <div class="btns">
+      <button type="button" class="ghost" id="fCancel">انصراف</button>
+      <button type="submit" class="primary">ثبت</button>
+    </div>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  const KEY = 'moneyapp.v1';
+  const PAL = ['#2F7D4A','#4E8FA8','#B26A00','#8E5BB5','#C0504D','#C9A227','#3B6E5C'];
+  const TYPES = {out:'هزینه', in:'درآمد', save:'واریز پس‌انداز', take:'برداشت از پس‌انداز'};
+
+  const $ = s => document.querySelector(s);
+  const view = $('#view'), sheetBg = $('#sheetBg'), sheetForm = $('#sheetForm');
+  const fAmount = $('#fAmount'), fPlan = $('#fPlan'), fNote = $('#fNote'), planWrap = $('#planWrap');
+  const toastEl = $('#toast');
+
+  let tab = 'home', sType = 'out', tt = null;
+
+  const uid = () => Math.random().toString(36).slice(2,10);
+  const defaults = () => ({
+    start:0, threshold:200000, goal:0,
+    plans:[
+      {id:uid(), name:'خوراک', budget:0, color:PAL[0]},
+      {id:uid(), name:'حمل‌ونقل', budget:0, color:PAL[1]},
+      {id:uid(), name:'قبوض', budget:0, color:PAL[2]}
+    ],
+    tx:[]
+  });
+  let S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || defaults(); } catch(e){ S = defaults(); }
+  function persist(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+
+  function parseNum(s){
+    s = String(s || '')
+      .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+      .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    return Math.max(0, Math.round(Number(s.replace(/[^\d.]/g, '')) || 0));
+  }
+  const fmt = n => Math.round(n).toLocaleString('fa-IR') + ' تومان';
+  const fmtIn = n => n ? Math.round(n).toLocaleString('en-US') : '';
+  const pc = r => Math.round(r * 100).toLocaleString('fa-IR') + '٪';
+  const fdate = iso => new Date(iso).toLocaleDateString('fa-IR', {month:'short', day:'numeric'});
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(tt);
+    tt = setTimeout(() => toastEl.classList.remove('on'), 2200);
+  }
+
+  const sumT = (type, f) => S.tx.reduce((a, x) => (x.type === type && (!f || f(x))) ? a + x.amount : a, 0);
+  const spentOn = pid => sumT('out', x => x.plan === pid);
+
+  function calc(){
+    const income = sumT('in'), expense = sumT('out');
+    const saved = sumT('save') - sumT('take');
+    const total = S.start + income - expense;
+    const spendable = total - saved;
+    return {income, expense, saved, total, spendable, alerts: alerts(spendable, saved)};
+  }
+
+  function alerts(spendable, saved){
+    const a = [];
+    if (S.start === 0 && !S.tx.length) a.push(['warn', 'برای شروع، موجودی اولیه را در تب پلن‌ها وارد کنید.']);
+    if (S.start > 0 && spendable <= 0) a.push(['bad', 'پول قابل خرج شما تمام شده است.']);
+    else if (S.start > 0 && spendable < S.threshold) a.push(['warn', 'موجودی قابل خرج از حد هشدار (' + fmt(S.threshold) + ') کمتر است.']);
+    S.plans.forEach(p => {
+      if (!p.budget) return;
+      const s = spentOn(p.id), r = s / p.budget;
+      if (r >= 1) a.push(['bad', 'بودجه «' + p.name + '» تمام شده و ' + fmt(s - p.budget) + ' بیشتر خرج شده.']);
+      else if (r >= 0.8) a.push(['warn', p.name + ': ' + pc(r) + ' بودجه مصرف شده.']);
+    });
+    const planned = S.plans.reduce((x, p) => x + p.budget, 0);
+    if (planned > 0 && spendable > 0 && planned > spendable) a.push(['warn', 'مجموع بودجه پلن‌ها از پول قابل خرج بیشتر است.']);
+    if (S.goal > 0 && saved >= S.goal) a.push(['good', 'به هدف پس‌انداز رسیدید!']);
+    return a;
+  }
+
+  function rowTx(x, withDelete){
+    const p = S.plans.find(p => p.id === x.plan);
+    const label = x.note || TYPES[x.type];
+    const sub = [TYPES[x.type], (x.type === 'out' && p) ? p.name : '', fdate(x.date)].filter(Boolean).join('، ');
+    const sign = x.type === 'in' ? '+' : x.type === 'out' ? '−' : '';
+    const cls = x.type === 'in' ? 'in' : x.type === 'out' ? 'out' : 'neu';
+    return `<div class="row">
+      <div><div>${esc(label)}</div><small>${esc(sub)}</small></div>
+      <div class="r-end"><span class="amt ${cls}">${sign}${fmt(x.amount)}</span>
+        ${withDelete ? `<button class="del" data-del="${x.id}" aria-label="حذف">✕</button>` : ''}</div>
+    </div>`;
+  }
+
+  function homeView(T){
+    const goalPct = S.goal ? Math.min(100, T.saved / S.goal * 100) : 0;
+    const recent = [...S.tx].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
+    return `
+      <section class="hero">
+        <small>قابل خرج</small>
+        <div class="big">${fmt(T.spendable)}</div>
+        <small>کل موجودی: ${fmt(T.total)}</small>
+        <div class="grid2">
+          <div class="stat"><small>درآمد کل</small><div>${fmt(T.income)}</div></div>
+          <div class="stat"><small>هزینه کل</small><div>${fmt(T.expense)}</div></div>
+        </div>
+      </section>
+      ${T.alerts.map(([l, m]) => `<div class="alert ${l}">${esc(m)}</div>`).join('')}
+      <section class="card">
+        <h2>پس‌انداز</h2>
+        <div>${fmt(T.saved)}${S.goal ? ' از ' + fmt(S.goal) : ''}</div>
+        <div class="bar"><i style="width:${goalPct}%;background:var(--gold)"></i></div>
+        <small>${S.goal ? pc(goalPct / 100) + ' از هدف' : 'هدف پس‌انداز را در تب پلن‌ها تعیین کنید.'}</small>
+      </section>
+      <section class="card">
+        <h2>آخرین تراکنش‌ها</h2>
+        ${recent.length ? recent.map(x => rowTx(x, false)).join('') : '<div class="empty">هنوز تراکنشی ثبت نشده. دکمه + را بزنید.</div>'}
+      </section>`;
+  }
+
+  function plansView(){
+    const rows = S.plans.map(p => {
+      const s = spentOn(p.id), r = p.budget ? s / p.budget : 0;
+      const color = r >= 1 ? 'var(--red)' : r >= 0.8 ? 'var(--amber)' : p.color;
+      return `<section class="card">
+        <div class="inline">
+          <span class="dot" style="background:${p.color}"></span>
+          <strong style="flex:1">${esc(p.name)}</strong>
+          <button class="del" data-delp="${p.id}" aria-label="حذف پلن">✕</button>
+        </div>
+        <div class="bar"><i style="width:${Math.min(100, r * 100)}%;background:${color}"></i></div>
+        <div class="row" style="border:0;padding:0">
+          <small>خرج شده: ${fmt(s)}</small>
+          <small>${p.budget ? 'مانده: ' + fmt(Math.max(0, p.budget - s)) : 'بودجه تعیین نشده'}</small>
+        </div>
+        <label>بودجه (تومان)
+          <input data-budget="${p.id}" inputmode="numeric" value="${fmtIn(p.budget)}">
+        </label>
+      </section>`;
+    }).join('');
+    return `
+      <section class="card">
+        <h2>تنظیمات کلی</h2>
+        <label>موجودی اولیه (تومان)<input id="sStart" inputmode="numeric" value="${fmtIn(S.start)}"></label>
+        <label>حد هشدار موجودی (تومان)<input id="sThr" inputmode="numeric" value="${fmtIn(S.threshold)}"></label>
+        <label>هدف پس‌انداز (تومان)<input id="sGoal" inputmode="numeric" value="${fmtIn(S.goal)}"></label>
+      </section>
+      ${rows}
+      <section class="card">
+        <h2>پلن جدید</h2>
+        <label>نام پلن<input id="nName" maxlength="30" placeholder="مثلاً سفر"></label>
+        <label>بودجه (اختیاری)<input id="nBudget" inputmode="numeric" placeholder="مثلاً ۵۰۰۰۰۰"></label>
+        <div style="margin-top:12px"><button class="primary" data-addplan>افزودن پلن</button></div>
+      </section>`;
+  }
+
+  function txView(){
+    const list = [...S.tx].sort((a, b) => b.date.localeCompare(a.date));
+    return `<section class="card">
+      <h2>همه تراکنش‌ها</h2>
+      ${list.length ? list.map(x => rowTx(x, true)).join('') : '<div class="empty">هنوز تراکنشی ثبت نشده.</div>'}
+    </section>`;
+  }
+
+  function render(){
+    const T = calc();
+    view.innerHTML = tab === 'home' ? homeView(T) : tab === 'plans' ? plansView() : txView();
+    document.querySelectorAll('nav .t').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
+  }
+
+  function setType(t){
+    sType = t;
+    document.querySelectorAll('#segType button').forEach(b => b.setAttribute('aria-pressed', b.dataset.type === t));
+    planWrap.hidden = t !== 'out';
+  }
+  function openSheet(){
+    fPlan.innerHTML = S.plans.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('') + '<option value="">سایر</option>';
+    fAmount.value = ''; fNote.value = '';
+    setType('out');
+    sheetBg.hidden = false;
+    setTimeout(() => fAmount.focus(), 50);
+  }
+  function closeSheet(){ sheetBg.hidden = true; }
+
+  document.querySelector('nav').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'fab') return openSheet();
+    if (b.dataset.tab) { tab = b.dataset.tab; render(); window.scrollTo(0, 0); }
+  });
+
+  view.addEventListener('click', e => {
+    const t = e.target.closest('button'); if (!t) return;
+    if (t.dataset.del) {
+      S.tx = S.tx.filter(x => x.id !== t.dataset.del);
+    } else if (t.dataset.delp) {
+      const p = S.plans.find(p => p.id === t.dataset.delp);
+      if (!p || !confirm('پلن «' + p.name + '» حذف شود؟ هزینه‌های ثبت‌شده بدون پلن می‌مانند.')) return;
+      S.plans = S.plans.filter(x => x.id !== p.id);
+    } else if (t.hasAttribute('data-addplan')) {
+      const name = $('#nName').value.trim();
+      if (!name) return toast('نام پلن را وارد کنید');
+      S.plans.push({id: uid(), name, budget: parseNum($('#nBudget').value), color: PAL[S.plans.length % PAL.length]});
+    } else return;
+    persist(); render();
+  });
+
+  view.addEventListener('change', e => {
+    const el = e.target;
+    if (el.dataset.budget) {
+      const p = S.plans.find(p => p.id === el.dataset.budget);
+      if (p) p.budget = parseNum(el.value);
+    } else if (el.id === 'sStart') S.start = parseNum(el.value);
+    else if (el.id === 'sThr') S.threshold = parseNum(el.value);
+    else if (el.id === 'sGoal') S.goal = parseNum(el.value);
+    else return;
+    persist(); render();
+  });
+
+  $('#segType').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (b) setType(b.dataset.type);
+  });
+  $('#fCancel').addEventListener('click', closeSheet);
+  sheetBg.addEventListener('click', e => { if (e.target === sheetBg) closeSheet(); });
+
+  sheetForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const amount = parseNum(fAmount.value);
+    if (!amount) return toast('مبلغ معتبر وارد کنید');
+    const T = calc();
+    if (sType === 'out' && amount > T.spendable && !confirm('موجودی قابل خرج کافی نیست. باز هم ثبت شود؟')) return;
+    if (sType === 'save' && amount > T.spendable) return toast('موجودی قابل خرج کافی نیست');
+    if (sType === 'take' && amount > T.saved) return toast('بیشتر از پس‌انداز نمی‌توانید برداشت کنید');
+    S.tx.push({
+      id: uid(), type: sType, amount,
+      plan: sType === 'out' ? fPlan.value : '',
+      note: fNote.value.trim(),
+      date: new Date().toISOString()
+    });
+    persist(); closeSheet(); render(); toast('ثبت شد');
+  });
+
+  $('#today').textContent = new Date().toLocaleDateString('fa-IR', {weekday:'long', day:'numeric', month:'long'});
+  render();
+})();
+</script>
+</body>
+</html>

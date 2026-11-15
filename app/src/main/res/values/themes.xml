@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.MyMoney" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/emerald_primary</item>
+        <item name="colorPrimaryDark">@color/emerald_dark</item>
+        <item name="android:statusBarColor">@color/emerald_dark</item>
+        <item name="android:windowBackground">@color/emerald_light</item>
+    </style>
+</resources>
